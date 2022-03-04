@@ -1,14 +1,8 @@
-# Slim 3 Skeleton
-
-This is a simple skeleton project for Slim 3 that includes Twig, Flash messages and Monolog.
-
-## Create your project:
-
-    $ composer create-project --no-interaction --stability=dev akrabat/slim3-skeleton my-app
+# OH
 
 ### Run it:
 
-1. `$ cd my-app`
+1. `$ composer install`
 2. `$ php -S 0.0.0.0:8888 -t public public/index.php`
 3. Browse to http://localhost:8888
 
@@ -30,4 +24,8 @@ This is a simple skeleton project for Slim 3 that includes Twig, Flash messages 
 * `app/middleware.php`: Application middleware
 * `app/routes.php`: All application routes are here
 * `app/src/Action/HomeAction.php`: Action class for the home page
+* `app/src/Action/CheckAction.php`: Action class for the calculation page
+* `app/src/Action/CheckPostAction.php`: Action class for the calculation background post page
 * `app/templates/home.twig`: Twig template file for the home page
+* `app/templates/check.twig`: Twig template file for the calculation page
+
