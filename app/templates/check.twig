@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Slim 3</title>
+        <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
+        <link href='{{ base_url() }}/css/style.css' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+        
+    </head>
+    <body>
+        
+          
+    <div class="container">
+
+        <br>
+        <h1>Felvételi kalkulátor</h1>
+        <div class="card">
+            <div class="card-header">
+                Válassz felvételizőt
+            </div>
+            <div class="card-body">
+                 <select class="form-control" data-role="select-dropdown" data-profile="minimal" id="ide" data-url= "/checkPost/">
+                    <option value="" selected>Nyisd meg a listát itt</option>
+                    {% for student in students %}
+                        <option value="{{ student }}">{{ student }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="card-footer">
+                Eredmény:  <div id="target"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+       
+$('#ide').on('change', function(e) {
+   // console.log($(this).val());
+    var url = $(this).data("url") + $(this).val(); 
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: 'json',
+        success: function(res) {
+            
+            // get the ajax response data
+           
+            console.log(res);
+            // update modal content
+             $('#target').removeClass();
+            if(res != null)
+            {
+                $('#target').addClass('text-'+res.class).html(res.message);
+            } else {
+                $('#target').addClass('text-warning').html('Valami nem jó');
+            }
+            // show modal
+           // $('#myModal').modal('show');
+            
+        },
+        error:function(request, status, error) {
+            console.log("ajax call went wrong:" + request.responseText);
+        }
+    });
+});
+
+
+    </script>
+    </body>
+</html>
+        

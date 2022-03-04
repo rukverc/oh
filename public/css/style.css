@@ -1,0 +1,97 @@
+
+.wrap-drop {
+    background:#e7ded5;
+    box-shadow:3px 3px 3px rgba(0,0,0,.2);
+    cursor:pointer;
+    margin:0 auto;
+    max-width:225px;
+    padding:1rem;
+    position:relative;
+    width:75%;
+    z-index:3;
+    }
+    
+    .wrap-drop::after {
+    border-color:#695d52 transparent;
+    border-style:solid;
+    border-width:10px 10px 0;
+    content:"";
+    height:0;
+    margin-top:-4px;
+    position:absolute;
+    right:1rem;
+    top:50%;
+    width:0;
+    }
+    
+    .wrap-drop .drop {
+    background:#e7ded5;
+    box-shadow:3px 3px 3px rgba(0,0,0,.2);
+    display:none;
+    left:0;
+    list-style:none;
+    margin-top:0;
+    opacity:0;
+    padding-left:0;
+    pointer-events:none;
+    position:absolute;
+    right:0;
+    top:100%;
+    z-index:2;
+    }
+    
+    .wrap-drop .drop li a {
+    color:#695d52;
+    display:block;
+    padding:1rem;
+    text-decoration:none;
+    }
+    
+    .wrap-drop span {
+    color:#928579;
+    }
+    
+    .wrap-drop .drop li:hover a {
+    background-color:#695d52;
+    color:#e7ded5;
+    }
+    
+    .wrap-drop.active::after {
+    border-width:0 10px 10px;
+    }
+    
+    .wrap-drop.active .drop {
+    display:block;
+    opacity:1;
+    pointer-events:auto;
+    }
+
+    select {
+        -webkit-appearance: button;
+        -moz-appearance: button;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -webkit-padding-end: 20px;
+        -moz-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -moz-padding-start: 2px;
+        background-color: lightgray; /* Fallback color if gradients are not supported */
+        background-image: url(../images/select-arrow.png), -webkit-linear-gradient(top, #E5E5E5, #F4F4F4); /* For Chrome and Safari */
+        background-image: url(../images/select-arrow.png), -moz-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Firefox (3.6 to 15) */
+        background-image: url(../images/select-arrow.png), -ms-linear-gradient(top, #E5E5E5, #F4F4F4); /* For pre-releases of Internet Explorer  10*/
+        background-image: url(../images/select-arrow.png), -o-linear-gradient(top, #E5E5E5, #F4F4F4); /* For old Opera (11.1 to 12.0) */
+        background-image: url(../images/select-arrow.png), linear-gradient(to bottom, #E5E5E5, #F4F4F4); /* Standard syntax; must be last */
+        background-position: center right;
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        border-radius: 2px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        color: #555;
+        font-size: inherit;
+        margin: 0;
+        overflow: hidden;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
