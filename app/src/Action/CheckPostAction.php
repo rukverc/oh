@@ -18,15 +18,10 @@ final class CheckPostAction
     }
 
     public function __invoke(Request $request, Response $response, $args)
-    {
-        //error_log($request->getAttribute('student'));
+    {       
         $this->logger->info("Check post page action dispatched");
         $studentCalculation = new Calculator($request->getAttribute('student'));
-        //$back = $studentCalculation->calculateResult();
-        
-      // headers
-        //$response = $response->withHeader('Content-Type','application/json');
-        // body
+       
         $response->getBody()->write(json_encode($studentCalculation->result()));
     }
 

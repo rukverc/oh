@@ -39,37 +39,28 @@
 
     <script>
        
-$('#ide').on('change', function(e) {
-   // console.log($(this).val());
-    var url = $(this).data("url") + $(this).val(); 
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: 'json',
-        success: function(res) {
-            
-            // get the ajax response data
-           
-            console.log(res);
-            // update modal content
-             $('#target').removeClass();
-            if(res != null)
-            {
-                $('#target').addClass('text-'+res.class).html(res.message);
-            } else {
-                $('#target').addClass('text-warning').html('Valami nem jó');
-            }
-            // show modal
-           // $('#myModal').modal('show');
-            
-        },
-        error:function(request, status, error) {
-            console.log("ajax call went wrong:" + request.responseText);
-        }
-    });
-});
-
-
+        $('#ide').on('change', function(e) {
+        // console.log($(this).val());
+            var url = $(this).data("url") + $(this).val(); 
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: 'json',
+                success: function(res) {
+                    console.log(res);
+                    $('#target').removeClass();
+                    if(res != null)
+                    {
+                        $('#target').addClass('text-'+res.class).html(res.message);
+                    } else {
+                        $('#target').addClass('text-warning').html('Valami nem jó');
+                    }
+                },
+                error:function(request, status, error) {
+                    console.log("ajax call went wrong:" + request.responseText);
+                }
+            });
+        });
     </script>
     </body>
 </html>
