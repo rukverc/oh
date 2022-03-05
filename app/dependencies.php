@@ -50,6 +50,6 @@ $container[App\Action\CheckAction::class] = function ($c) {
 };
 
 $container[App\Action\CheckPostAction::class] = function ($c) {
-    return new App\Action\CheckPostAction( $c->get('logger'));
+    return new App\Action\CheckPostAction( );
 };
 

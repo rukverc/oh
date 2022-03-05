@@ -10,32 +10,38 @@ public $progmatTargyak;
 public $AnlgoszTargyak;
 
     public function __construct($param) {
-    $this->param = $param;
-    $this->kotelezoTantargyak = ['magyar nyelv és irodalom', 'történelem', 'matematika'];
-    $this->progInfoTargyak = ['kotelezo' => [
-                                'matematika'
-                                ],
-                                'kotValTargyak' => [
-                                    'biológia', 'fizika', 'informatika', 'kémia'
-                                ],
-                                'kotTipus' => 'emelt, közép',
-                            ];
-    $this->agloTargyak = ['kotelezo' => [
-                                'angol'
-                                ],
-                                'kotValTargyak' => [
-                                    'francia', 'német', 'olasz', 'orosz'
-                                ],
-                                'kotTipus' => 'emelt',
-                            ];
-    include('homework_input.php');
-    $this->student = ${$param};
+        $this->param = $param;
+        $this->kotelezoTantargyak = ['magyar nyelv és irodalom', 'történelem', 'matematika'];
+        $this->progInfoTargyak = ['kotelezo' => [
+                                    'matematika'
+                                    ],
+                                    'kotValTargyak' => [
+                                        'biológia', 'fizika', 'informatika', 'kémia'
+                                    ],
+                                    'kotTipus' => 'emelt, közép',
+                                ];
+        $this->agloTargyak = ['kotelezo' => [
+                                    'angol'
+                                    ],
+                                    'kotValTargyak' => [
+                                        'francia', 'német', 'olasz', 'orosz'
+                                    ],
+                                    'kotTipus' => 'emelt',
+                                ];
+        include('homework_input.php');
+        $this->student = ${$param};
 
+    }
+
+    public function setParam($param)  //unitteszthez
+    {
+        $this->param = $param;
     }
 
 
     public function result()
     {
+        //Ellenőrizzük a kötelező tantárgyakat
         $kotelezok = $this->checkKotelezok();
         if (count($kotelezok) > 0) {
             $kotelezokString = implode(', ', $kotelezok);
@@ -44,6 +50,7 @@ public $AnlgoszTargyak;
                 'message' => 'hiba, nem lehetséges a pontszámítás a kötelező érettségi tárgyak hiánya miatt: '. $kotelezokString
             ];
         }
+        //Megnézzük, vannak-e 20% alattiak
         $lowPercents = $this->checkLowPercent();
         if (count($lowPercents) > 0) {
             $lowPercentString = implode(', ', $lowPercents);
@@ -53,13 +60,14 @@ public $AnlgoszTargyak;
             ];
         }
 
+        //Kiszámoltatjuk a pontokat
         $checkPoints = $this->checkPoints();
-        if ( ($checkPoints['alap'] + $checkPoints['tobblet']) > 0) {
+        if ( ($checkPoints['alap'] + $checkPoints['tobblet']) > 0) {            //ha több pontja van, mint 0
             return [
                 'class' => 'success',
                 'message' => $checkPoints['alap'] + $checkPoints['tobblet'] .' ('.$checkPoints['alap'].'  alappont + '.$checkPoints['tobblet'].' többletpont)'
             ];
-        } else {
+        } else {            //ha 0 pontja lett
             return [
                 'class' => 'warning',
                 'message' => 'Nem sikerült pontot elérni'
@@ -67,10 +75,11 @@ public $AnlgoszTargyak;
         }
     }
 
-    private function checkPoints()
+    public function checkPoints()
     {        
        $alapPont = $this->checkAlapPont();
        $tobbletPont = $this->checkTobbletPont();
+       //Ha több pontja van, mint 100 akkor visszavesszük a maximumra
        if ( $tobbletPont > 100 ) {
             $tobbletPont = 100;
        }
@@ -79,34 +88,31 @@ public $AnlgoszTargyak;
                 ];
     }
 
-    private function checkTobbletPont()
+    public function checkTobbletPont()
     {
         $cntEmelt = 0;
         foreach ($this->student['erettsegi-eredmenyek'] as $key => $value) {
-            if ($value['tipus'] == 'emelt') {
+            if ($value['tipus'] == 'emelt') {    //megnézzük, hogy az emelt szint hányszor van meg az eredmények között
                 $cntEmelt = $cntEmelt +1;
             }
         }
 
-        $emeltPonts =  $cntEmelt * 50 ;
+        $emeltPonts =  $cntEmelt * 50 ;   //megszorozzuk 50-nel a kapott számot
 
         $nyelv = array();
         foreach ($this->student['tobbletpontok'] as $key => $value) {
             
             $nyelvStr = $this->ekezettelenito($value['nyelv']);
-            //error_log(print_r($nyelvStr, true));
-            //error_log(print_r($value, true));
-           
-            if (isset($nyelv[$nyelvStr]) && $nyelv[$nyelvStr] == 'B2' && $value['tipus'] == 'C1') {
+
+            if (isset($nyelv[$nyelvStr]) && $nyelv[$nyelvStr] == 'B2' && $value['tipus'] == 'C1') {  //hamár van ilyen nyelvből, de van masik is, amelyiknak nagyobb a potértéke, akkor kicseréljük
                 $nyelv[$nyelvStr] = $value['tipus'];
-                error_log('1: '.$value['tipus']);
-            } else {
+            } else {            //ha nincs még ilyen tárgy a listában, akkor létrehozzuk
                 $nyelv[$nyelvStr] = '';
                 $nyelv[$nyelvStr] = $value['tipus'];
-                error_log('2: '.$value['tipus']);
             }
         }
 
+        //kiszámítjuk a pontértékeinet
         $nyelvPoints= 0 ;
         foreach ($nyelv as $key => $value) {
             if ($value == 'B2') {
@@ -115,13 +121,11 @@ public $AnlgoszTargyak;
                 $nyelvPoints = $nyelvPoints + 40;
             } 
         }
-        //error_log(print_r($nyelv, true));
-        error_log($nyelvPoints);
-
+        
         return $emeltPonts + $nyelvPoints;
     }
 
-    private function checkAlapPont()
+    public function checkAlapPont()
     {
             $pont = 0;
             $kotval = [];
@@ -132,7 +136,7 @@ public $AnlgoszTargyak;
             //megnézzük benne van-e a kötelező tárgy
                 foreach ($this->student['erettsegi-eredmenyek'] as $key => $value) {
                     $percent = substr_replace($value['eredmeny'], "", -1);
-                    //error_log($percent);
+                    
                     //ha a köletezo tantárgy megvan, hozzárendeljük a pontszámát
                 if (in_array( $value['nev'], $this->progInfoTargyak['kotelezo'] )) {
                         $pont = $pont + $percent;
@@ -191,7 +195,7 @@ public $AnlgoszTargyak;
         return $pont + $kotvalPont;
 
     }
-    private function checkLowPercent()
+    public function checkLowPercent()
     {
         $lows = [];
         foreach ($this->student['erettsegi-eredmenyek'] as $key => $value) {
@@ -204,13 +208,12 @@ public $AnlgoszTargyak;
         return $lows;
     }
 
-    private function checkKotelezok()
+    public function checkKotelezok()
     {
         $cnt = 0;
         $existingKOtelezok = [];
         foreach ($this->student['erettsegi-eredmenyek'] as $key => $value) {
             if (in_array($value['nev'], $this->kotelezoTantargyak)) {
-                error_log('megvan '.$value['nev']);
                 $existingKOtelezok[] = $value['nev'];
                 $cnt = $cnt +1;
             }

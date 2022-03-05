@@ -10,16 +10,17 @@ use App\Helpers\Calculator;
 final class CheckPostAction
 {
     private $view;
-    private $logger;
+    //private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct()
     {
-        $this->logger = $logger;
+        //$this->logger = $logger;
     }
 
     public function __invoke(Request $request, Response $response, $args)
     {       
-        $this->logger->info("Check post page action dispatched");
+        //$this->logger->info("Check post page action dispatched");
+        //kipéldányosítjuk a jelentkezőt
         $studentCalculation = new Calculator($request->getAttribute('student'));
        
         $response->getBody()->write(json_encode($studentCalculation->result()));
